@@ -7,6 +7,29 @@ img {
     height: 150%;
     width: 32%;
     margin-right: 2%;
+    border: 0;
+    /*On click animation */
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+/*on click animation*/
+.welcome_img:after {
+    content: "";
+    background: rgb(79, 121, 211);
+    display: block;
+    position: absolute;
+    padding-top: 150%;
+    padding-left: 36%;
+    margin-left: -20px!important;
+    margin-top: -120%;
+    opacity: 0;
+    transition: all 3s;
+}
+/*on click animation*/
+.welcome_img:active:after {
+    opacity: 1;
+    transition: 0s;
 }
 
 .welcome_title {
@@ -14,6 +37,7 @@ img {
     flex-direction: row;
     height: 110%;
     width: 110%;
+    margin-top: 5%;
 }
 
 /*div {
