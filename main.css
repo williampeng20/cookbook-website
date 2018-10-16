@@ -7,7 +7,10 @@ img {
     height: 100%;
     width: 33%;
     margin-right: 2%;
-    border: 0;
+    /*Remove button borders */
+    border: none;
+    padding: 0;
+    background: none;
     /*On click animation */
     -webkit-transition-duration: 0.4s; /* Safari */
     transition-duration: 0.4s;
