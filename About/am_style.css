@@ -56,4 +56,44 @@ p {
 .resume_contact {
   display: flex;
   flex-direction: row;
+  margin-top: 5%;
+}
+
+.resume {
+  width: 60%;
+  height: 500;
+  margin-left: 10%;
+}
+
+.contact {
+  display: flex;
+  flex-direction: column;
+  margin-left: 20%;
+}
+
+.contact_img {
+  height: 100%;
+  width: 100%;
+  align-self: center;
+  opacity: 1;
+}
+
+.contact_text {
+  align-self: center;
+  font-family: Courier;
+  font-size: 12pt;
+}
+
+.contact_button {
+  width: 40%;
+  height: 40%;
+  margin-bottom: 10%;
+  display: flex;
+  flex-direction: column;
+  background: none;
+  border: none;
+}
+
+.contact_button:hover .contact_img {
+  opacity: 0.6;
 }
