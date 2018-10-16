@@ -3,13 +3,24 @@
 <head>
     <link rel="stylesheet" type="text/css" href="main.css">
     <link rel="icon" href="graphics/cs_icon.ico">
+    <script src="util.js"></script>
     <title>William Peng</title>
 </head>
-<body scroll="no" style="overflow: hidden">
-    <div class="welcome_title">
-        <button class="welcome_img"><img src="graphics/IMG_5000.png" alt="W"></button>
-        <button class="welcome_img"><img src="graphics/N4.png" alt="W"></button>
-        <button class="welcome_img"><img src="graphics/IMG_1223-1.png" alt="P"></button>
+
+<body onload="fade_in_element('title')" scroll="no" style="overflow: hidden">
+    <div id="title" class="welcome_title">
+        <button class="welcome_img">
+          <img class="letter_img" src="graphics/IMG_5000.png" alt="W">
+          <div class="hover_text">Who am I?</div>
+        </button>
+        <button class="welcome_img">
+          <img class="letter_img" src="graphics/N4.png" alt="W">
+          <div class="hover_text">Work Portfolio</div>
+        </button>
+        <button class="welcome_img">
+          <img class="letter_img" src="graphics/IMG_1223-1.png" alt="P">
+          <div class="hover_text" style="text-align: left; margin-left: 5%">Photography Portfolio</div>
+        </button>
     </div>
 
 </body>

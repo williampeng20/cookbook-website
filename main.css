@@ -16,6 +16,29 @@ img {
     transition-duration: 0.4s;
     cursor: pointer;
 }
+
+.letter_img {
+    opacity: 1;
+    /* hover effect */
+    transition: 0.75s ease;
+}
+
+.hover_text {
+    opacity: 0;
+    font-family: Courier;
+    font-weight: bold;
+    font-size: 14pt;
+    /* hover effect */
+    transition: 0.75s ease;
+}
+
+.welcome_img:hover .letter_img {
+    opacity: 0.8;
+}
+
+.welcome_img:hover .hover_text {
+    opacity: 1;
+}
 /*on click animation*/
 .welcome_img:after {
     content: "";
@@ -41,6 +64,7 @@ img {
     width: 110%;
     height: 10%;
     margin-top: 5%;
+    opacity: 0;
 }
 
 /*div {
