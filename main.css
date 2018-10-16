@@ -19,7 +19,7 @@ img {
 /*on click animation*/
 .welcome_img:after {
     content: "";
-    background: rgb(79, 121, 211);
+    background: rgb(255, 255, 255);
     display: block;
     position: absolute;
     padding-top: 150%;
