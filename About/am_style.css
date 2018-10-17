@@ -46,6 +46,8 @@ p {
 
 .comparison {
   margin-right: 0.5%;
+  width: 50%;
+  height: 50%;
 }
 
 .cover_letter {
@@ -60,9 +62,9 @@ p {
 }
 
 .resume {
-  width: 60%;
+  width: 100%;
   height: 500;
-  margin-left: 10%;
+  margin-left: 5%;
 }
 
 .contact {
