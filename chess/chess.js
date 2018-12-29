@@ -21,7 +21,7 @@ function restart() {
   myGameArea.en_passant = [];
   myGameArea.available_to_en_passant = [null, null];
   // King information
-  myGameArea.mate = false;
+  myGameArea.checkmate = false;
   myGameArea.king_position = {'white' : [7,4], 'black' : [0,4]};
 
   myGameArea.update();
@@ -90,7 +90,7 @@ class Pawn extends ChessPiece {
     this.moved = true;
     var enemy_color = this.color == 'white' ? 'black' : 'white';
     if (r_new == myGameArea.king_position[enemy_color][0] && c_new == myGameArea.king_position[enemy_color][1]) {
-      myGameArea.mate = true;
+      myGameArea.checkmate = true;
     }
     myGameArea.board[r_new][c_new] = myGameArea.board[this.r][this.c];
     myGameArea.board[this.r][this.c] = null;
@@ -120,7 +120,9 @@ class Pawn extends ChessPiece {
       }
     }
 
-    myGameArea.check(this.color);
+    if (!myGameArea.checkmate) {
+      myGameArea.check(this.color);
+    }
     myGameArea.newTurn();
   }
 }
@@ -162,13 +164,11 @@ class Rook extends ChessPiece {
       }
     }
 
-    // Castling
-
-
     myGameArea.options = options;
   }
 
   move(r_new, c_new) {
+    this.moved = true;
     var enemy_color = this.color == 'white' ? 'black' : 'white';
     if (r_new == myGameArea.king_position[enemy_color][0] && c_new == myGameArea.king_position[enemy_color][1]) {
       myGameArea.checkmate = true;
@@ -179,7 +179,9 @@ class Rook extends ChessPiece {
     this.r = r_new;
     this.c = c_new;
 
-    myGameArea.check(this.color);
+    if (!myGameArea.checkmate) {
+      myGameArea.check(this.color);
+    }
     myGameArea.newTurn();
   }
 }
@@ -230,7 +232,9 @@ class Knight extends ChessPiece {
     this.r = r_new;
     this.c = c_new;
 
-    myGameArea.check(this.color);
+    if (!myGameArea.checkmate) {
+      myGameArea.check(this.color);
+    }
     myGameArea.newTurn();
   }
 }
@@ -282,7 +286,9 @@ class Bishop extends ChessPiece {
     this.r = r_new;
     this.c = c_new;
 
-    myGameArea.check(this.color);
+    if (!myGameArea.checkmate) {
+      myGameArea.check(this.color);
+    }
     myGameArea.newTurn();
   }
 }
@@ -334,7 +340,9 @@ class Queen extends ChessPiece {
     this.r = r_new;
     this.c = c_new;
 
-    myGameArea.check(this.color);
+    if (!myGameArea.checkmate) {
+      myGameArea.check(this.color);
+    }
     myGameArea.newTurn();
   }
 }
@@ -367,12 +375,45 @@ class King extends ChessPiece {
     }
 
     // Castling
-
+    if (myGameArea.check_positions.length == 0 && !this.moved &&
+      ((myGameArea.board[this.r][0] != null && myGameArea.board[this.r][0].type == 'rook' && !myGameArea.board[this.r][0].moved) ||
+      (myGameArea.board[this.r][7] != null && myGameArea.board[this.r][7].type == 'rook' && !myGameArea.board[this.r][7].moved))) {
+      var rooks = [];
+      if (myGameArea.board[this.r][0] != null && myGameArea.board[this.r][0].type == 'rook' && !myGameArea.board[this.r][0].moved) {
+        rooks.push([this.r, 0]);
+      }
+      if (myGameArea.board[this.r][7] != null && myGameArea.board[this.r][7].type == 'rook' && !myGameArea.board[this.r][7].moved) {
+        rooks.push([this.r, 7]);
+      }
+      for (var j = 0; j < rooks.length; j++) {
+        var empty_between = true;
+        console.log(rooks[j]);
+        var dir;
+        var spaces;
+        if (rooks[j][1] > this.c) {
+          dir = 1;
+          spaces = 2;
+        } else {
+          dir = -1;
+          spaces = 3;
+        }
+        for (var i = 1; i <= spaces; i++) {
+          if (myGameArea.board[this.r][this.c+i*dir] != null) {
+            console.log([this.r, this.c+i*dir, dir]);
+            empty_between = false;
+          }
+        }
+        if (empty_between) {
+          options.push([this.r, this.c + 2*dir]);
+        }
+      }
+    }
 
     myGameArea.options = options;
   }
 
   move(r_new, c_new) {
+    this.moved = true;
     var enemy_color = this.color == 'white' ? 'black' : 'white';
     if (r_new == myGameArea.king_position[enemy_color][0] && c_new == myGameArea.king_position[enemy_color][1]) {
       myGameArea.checkmate = true;
@@ -380,12 +421,25 @@ class King extends ChessPiece {
     myGameArea.board[r_new][c_new] = myGameArea.board[this.r][this.c];
     myGameArea.board[this.r][this.c] = null;
 
+    // Castling
+    if (this.c - c_new == -2) {
+      myGameArea.board[r_new][c_new - 1] = myGameArea.board[r_new][7];
+      myGameArea.board[r_new][7] = null;
+      myGameArea.board[r_new][c_new - 1].moved = true;
+    } else if (this.c - c_new == 2) {
+      myGameArea.board[r_new][c_new + 1] = myGameArea.board[r_new][0];
+      myGameArea.board[r_new][0] = null;
+      myGameArea.board[r_new][c_new + 1].moved = true;
+    }
+
     this.r = r_new;
     this.c = c_new;
 
     myGameArea.king_position[this.color] = [r_new, c_new];
 
-    myGameArea.check(this.color);
+    if (!myGameArea.checkmate) {
+      myGameArea.check(this.color);
+    }
     myGameArea.newTurn();
   }
 }
@@ -422,6 +476,7 @@ var myGameArea = {
         // King information
         this.checkmate = false;
         this.king_position = {'white' : [7,4], 'black' : [0,4]};
+        this.check_positions = [];
 
         this.update();
     },
@@ -442,6 +497,13 @@ var myGameArea = {
         }
       }
 
+      if (this.check_positions.length > 0) {
+        alert(this.turn + " king is in check!");
+        var attack_im = document.getElementById('attack');
+        for (var i = 0; i < this.check_positions.length; i++) {
+          this.context.drawImage(attack_im, this.check_positions[i][1]*72, this.check_positions[i][0]*72);
+        }
+      }
     },
 
     getClickCoordinates : function(event) {
@@ -490,7 +552,6 @@ var myGameArea = {
 
     moveChessPiece : function(r_old, c_old, r_new, c_new) {
       this.board[r_old][c_old].move(r_new, c_new);
-      this.update();
     },
 
     inOptions : function(coords) {
@@ -553,13 +614,6 @@ var myGameArea = {
           }
         }
       }
-
-      if (attack_positions.length > 0) {
-        alert(enemy_color + " king is in check!");
-        var attack_im = document.getElementById('attack');
-        for (var i = 0; i < attack_positions.length; i++) {
-          this.context.drawImage(attack_im, attack_positions[i][1]*72, attack_positions[i][0]*72);
-        }
-      }
+      this.check_positions = attack_positions;
     },
 }
