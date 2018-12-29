@@ -53,14 +53,12 @@ class Pawn extends ChessPiece {
   getLegalMoves() {
     var options = [];
     var en_passant = [];
-    var available_to_en_passant = [null, null];
     // Travel Move
     if (myGameArea.onBoard(this.r+this.direction, this.c) && myGameArea.board[this.r+this.direction][this.c] == null) {
       options.push([this.r+this.direction, this.c]);
     }
     if (!this.moved && myGameArea.board[this.r+(2*this.direction)][this.c] == null && myGameArea.board[this.r+this.direction][this.c] == null) {
       options.push([this.r+(2*this.direction), this.c]);
-      available_to_en_passant = [this.r+(2*this.direction), this.c];
     }
     // Attach Move
     if (myGameArea.onBoard(this.r+this.direction, this.c - 1) && myGameArea.board[this.r+this.direction][this.c - 1] != null
@@ -86,7 +84,6 @@ class Pawn extends ChessPiece {
     }
     myGameArea.options = options;
     myGameArea.en_passant = en_passant;
-    myGameArea.available_to_en_passant = available_to_en_passant;
   }
 
   move(r_new, c_new) {
@@ -101,6 +98,11 @@ class Pawn extends ChessPiece {
     if (myGameArea.inEnPassant([r_new, c_new])) {
       myGameArea.board[r_new - this.direction][c_new] = null;
     }
+
+    if (Math.abs(r_new - this.r) == 2) {
+      myGameArea.available_to_en_passant = [r_new, c_new];
+    }
+
 
     this.r = r_new;
     this.c = c_new;
@@ -427,12 +429,12 @@ var myGameArea = {
     update : function() {
       for (var i = 0; i < 8; i++) {
         for (var j = 0; j < 8; j+=2) {
-          this.context.fillStyle = i%2==0 ? "#504746" : "#BFADA3";
+          this.context.fillStyle = i%2==0 ? "#BFADA3" : "#504746";
           this.context.fillRect(j*72, i*72, 72, 72);
           if (this.board[i][j] != null) {
             this.context.drawImage(this.board[i][j].image, j*72, i*72, 72, 72);
           }
-          this.context.fillStyle = i%2==0 ? "#BFADA3" : "#504746";
+          this.context.fillStyle = i%2==0 ? "#504746" : "#BFADA3";
           this.context.fillRect((j+1)*72, i*72, 72, 72);
           if (this.board[i][j+1] != null) {
             this.context.drawImage(this.board[i][j+1].image, (j+1)*72, i*72, 72, 72);
