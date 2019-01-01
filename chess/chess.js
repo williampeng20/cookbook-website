@@ -426,10 +426,12 @@ class King extends ChessPiece {
       myGameArea.board[r_new][c_new - 1] = myGameArea.board[r_new][7];
       myGameArea.board[r_new][7] = null;
       myGameArea.board[r_new][c_new - 1].moved = true;
+      myGameArea.board[r_new][c_new - 1].c = c_new - 1;
     } else if (this.c - c_new == 2) {
       myGameArea.board[r_new][c_new + 1] = myGameArea.board[r_new][0];
       myGameArea.board[r_new][0] = null;
       myGameArea.board[r_new][c_new + 1].moved = true;
+      myGameArea.board[r_new][c_new + 1].c = c_new + 1;
     }
 
     this.r = r_new;
