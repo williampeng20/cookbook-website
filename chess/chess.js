@@ -27,12 +27,12 @@ function restart() {
   myGameArea.update();
 
   //Timer
-  myGameArea.timer.pause();
   setDifficulty();
   myGameArea.timer = white_timer;
 }
 
 function setDifficulty() {
+  myGameArea.timer.pause();
   var difficulty = document.getElementById('difficulty_select').value;
   if (difficulty == 'easy') {
     white_timer.reset(150);

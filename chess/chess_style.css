@@ -7,3 +7,50 @@ canvas {
     border: 3px solid #d3d3d3;
     background-color: #f1f1f1;
 }
+
+body {
+  display: flex;
+  flex-direction: row;
+}
+
+.ui {
+  width: 100%;
+  font-family: 'Lucida Console';
+}
+
+.time_display {
+  display: flex;
+  flex-direction: row;
+  margin-top: 20%;
+}
+
+#difficulty_select {
+  margin-left: 10%;
+  margin-right: 10%;
+  font-family: 'Lucida Console';
+}
+
+.timer {
+  margin-left: 10%;
+  margin-right: 10%;
+}
+
+.controls {
+  margin-top: 10%;
+  margin-left: 5%;
+}
+
+.control {
+  margin-left: 6%;
+  margin-right: 6%;
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-family: 'Lucida Console';
+  font-size: 16px;
+  border-radius: 10px;
+}

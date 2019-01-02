@@ -9,26 +9,31 @@ Created by William Peng 12/25/2018
     <title>Chess</title>
 </head>
 
-<body onload="load()">
+<body onload="load()" scroll="no" style="overflow: hidden">
 
     <div class='ui'>
-        <select id='difficulty_select' onchange="setDifficulty();">
-            <option value='easy'>Relaxed</option>
-            <option value='medium'>Challenging</option>
-            <option value='hard'>Blitz</option>
-        </select>
-        <div class='timer'>
-            <h1 id='white_timer'>10</h1>
-            <p>White</p>
+        <div class='time_display'>
+          <select id='difficulty_select' onchange="setDifficulty();">
+              <option value='easy'>Relaxed</option>
+              <option value='medium'>Challenging</option>
+              <option value='hard'>Blitz</option>
+          </select>
+
+          <div class='timer'>
+              <h1 id='white_timer'>10</h1>
+              <p>White</p>
+          </div>
+          <div class='timer'>
+              <h1 id='black_timer'>10</h1>
+              <p>Black</p>
+          </div>
         </div>
-        <div class='timer'>
-            <h1 id='black_timer'>10</h1>
-            <p>Black</p>
+
+        <div class='controls'>
+          <button class='control' onclick="timer_start()">Start</button>
+          <button class='control' onclick="timer_pause()">Pause</button>
+          <button class='control' onclick="restart()">Restart</button>
         </div>
-        
-        <button onclick="timer_start()">Start</button>
-        <button onclick="timer_pause()">Pause</button>
-        <button onclick="restart()">Restart</button>
     </div>
 
     <img src='images/black/bishop.png' id='black_bishop' width=0 height=0 />
