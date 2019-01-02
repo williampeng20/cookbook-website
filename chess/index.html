@@ -6,13 +6,30 @@ Created by William Peng 12/25/2018
 <head>
     <link rel="stylesheet" type="text/css" href="chess_style.css">
     <link rel="icon" href="../graphics/cs_icon.ico">
-    <script src="chess.js"></script>
     <title>Chess</title>
 </head>
 
 <body onload="load()">
 
-    <button onclick="restart()">Restart</button>
+    <div class='ui'>
+        <select id='difficulty_select' onchange="setDifficulty();">
+            <option value='easy'>Relaxed</option>
+            <option value='medium'>Challenging</option>
+            <option value='hard'>Blitz</option>
+        </select>
+        <div class='timer'>
+            <h1 id='white_timer'>10</h1>
+            <p>White</p>
+        </div>
+        <div class='timer'>
+            <h1 id='black_timer'>10</h1>
+            <p>Black</p>
+        </div>
+        
+        <button onclick="timer_start()">Start</button>
+        <button onclick="timer_pause()">Pause</button>
+        <button onclick="restart()">Restart</button>
+    </div>
 
     <img src='images/black/bishop.png' id='black_bishop' width=0 height=0 />
     <img src='images/black/king.png' id='black_king' width=0 height=0 />
@@ -31,6 +48,9 @@ Created by William Peng 12/25/2018
     <img src='images/option.png' id='option' width=0 height=0 />
     <img src='images/attack.png' id='attack' width=0 height=0 />
     <img src='images/select.png' id='select' width=0 height=0 />
+
+    <script src="timer.js"></script>
+    <script src="chess.js"></script>
 
 </body>
 </html>

@@ -13,7 +13,7 @@ function restart() {
     [new Pawn('white', 6, 0), new Pawn('white', 6, 1), new Pawn('white', 6, 2), new Pawn('white', 6, 3), new Pawn('white', 6, 4), new Pawn('white', 6, 5), new Pawn('white', 6, 6), new Pawn('white', 6, 7)],
     [new Rook('white', 7, 0), new Knight('white', 7, 1), new Bishop('white', 7, 2), new Queen('white', 7, 3), new King('white', 7, 4), new Bishop('white', 7, 5), new Knight('white', 7, 6), new Rook('white', 7, 7)],
   ];
-  myGameArea.turn = 'white';
+  myGameArea.turn = 'begin';
   myGameArea.turn_num = 1;
   myGameArea.selected = null;
   myGameArea.options = [];
@@ -25,13 +25,58 @@ function restart() {
   myGameArea.king_position = {'white' : [7,4], 'black' : [0,4]};
 
   myGameArea.update();
+
+  //Timer
+  myGameArea.timer.pause();
+  setDifficulty();
+  myGameArea.timer = white_timer;
 }
+
+function setDifficulty() {
+  var difficulty = document.getElementById('difficulty_select').value;
+  if (difficulty == 'easy') {
+    white_timer.reset(150);
+    black_timer.reset(150);
+  } else if (difficulty == 'medium') {
+    white_timer.reset(90);
+    black_timer.reset(90);
+  } else if (difficulty == 'hard') {
+    white_timer.reset(30);
+    black_timer.reset(30);
+  }
+}
+
+var debug_col = {
+  0 : 'A',
+  1 : 'B',
+  2 : 'C',
+  3 : 'D',
+  4 : 'E',
+  5 : 'F',
+  6 : 'G',
+  7 : 'H',
+};
+
+var debug_row = {
+  0 : 8,
+  1 : 7,
+  2 : 6,
+  3 : 5,
+  4 : 4,
+  5 : 3,
+  6 : 2,
+  7 : 1,
+};
 
 class ChessPiece {
   constructor(color, r, c) {
     this.color = color;
     this.r = r;
     this.c = c;
+  }
+
+  document_move(r_new, c_new) {
+    console.log(debug_col[this.c], debug_row[this.r], "->", debug_col[c_new], debug_row[r_new]);
   }
 }
 
@@ -87,6 +132,7 @@ class Pawn extends ChessPiece {
   }
 
   move(r_new, c_new) {
+    this.document_move(r_new, c_new);
     this.moved = true;
     var enemy_color = this.color == 'white' ? 'black' : 'white';
     if (r_new == myGameArea.king_position[enemy_color][0] && c_new == myGameArea.king_position[enemy_color][1]) {
@@ -168,6 +214,7 @@ class Rook extends ChessPiece {
   }
 
   move(r_new, c_new) {
+    this.document_move(r_new, c_new);
     this.moved = true;
     var enemy_color = this.color == 'white' ? 'black' : 'white';
     if (r_new == myGameArea.king_position[enemy_color][0] && c_new == myGameArea.king_position[enemy_color][1]) {
@@ -222,6 +269,7 @@ class Knight extends ChessPiece {
   }
 
   move(r_new, c_new) {
+    this.document_move(r_new, c_new);
     var enemy_color = this.color == 'white' ? 'black' : 'white';
     if (r_new == myGameArea.king_position[enemy_color][0] && c_new == myGameArea.king_position[enemy_color][1]) {
       myGameArea.checkmate = true;
@@ -276,6 +324,7 @@ class Bishop extends ChessPiece {
   }
 
   move(r_new, c_new) {
+    this.document_move(r_new, c_new);
     var enemy_color = this.color == 'white' ? 'black' : 'white';
     if (r_new == myGameArea.king_position[enemy_color][0] && c_new == myGameArea.king_position[enemy_color][1]) {
       myGameArea.checkmate = true;
@@ -330,6 +379,7 @@ class Queen extends ChessPiece {
   }
 
   move(r_new, c_new) {
+    this.document_move(r_new, c_new);
     var enemy_color = this.color == 'white' ? 'black' : 'white';
     if (r_new == myGameArea.king_position[enemy_color][0] && c_new == myGameArea.king_position[enemy_color][1]) {
       myGameArea.checkmate = true;
@@ -387,7 +437,6 @@ class King extends ChessPiece {
       }
       for (var j = 0; j < rooks.length; j++) {
         var empty_between = true;
-        console.log(rooks[j]);
         var dir;
         var spaces;
         if (rooks[j][1] > this.c) {
@@ -399,7 +448,6 @@ class King extends ChessPiece {
         }
         for (var i = 1; i <= spaces; i++) {
           if (myGameArea.board[this.r][this.c+i*dir] != null) {
-            console.log([this.r, this.c+i*dir, dir]);
             empty_between = false;
           }
         }
@@ -413,6 +461,7 @@ class King extends ChessPiece {
   }
 
   move(r_new, c_new) {
+    this.document_move(r_new, c_new);
     this.moved = true;
     var enemy_color = this.color == 'white' ? 'black' : 'white';
     if (r_new == myGameArea.king_position[enemy_color][0] && c_new == myGameArea.king_position[enemy_color][1]) {
@@ -457,6 +506,9 @@ var myGameArea = {
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
         document.addEventListener('click', this.getClickCoordinates);
 
+        //Chess Timing
+        this.timer = white_timer;
+
         // Coordinates in [Row, Column]
         this.board = [
           [new Rook('black', 0, 0), new Knight('black', 0, 1), new Bishop('black', 0, 2), new Queen('black', 0, 3), new King('black', 0, 4), new Bishop('black', 0, 5), new Knight('black', 0, 6), new Rook('black', 0, 7)],
@@ -468,7 +520,7 @@ var myGameArea = {
           [new Pawn('white', 6, 0), new Pawn('white', 6, 1), new Pawn('white', 6, 2), new Pawn('white', 6, 3), new Pawn('white', 6, 4), new Pawn('white', 6, 5), new Pawn('white', 6, 6), new Pawn('white', 6, 7)],
           [new Rook('white', 7, 0), new Knight('white', 7, 1), new Bishop('white', 7, 2), new Queen('white', 7, 3), new King('white', 7, 4), new Bishop('white', 7, 5), new Knight('white', 7, 6), new Rook('white', 7, 7)],
         ];
-        this.turn = 'white';
+        this.turn = 'begin';
         this.turn_num = 1;
         this.selected = null;
         this.options = [];
@@ -513,24 +565,20 @@ var myGameArea = {
       var y = event.clientY;
       var r = Math.floor((y - 3) / 72);
       var c = Math.floor((x - 3) / 72);
-      if (r >= 8 || c >= 8) {
-        console.log('out of bounds');
+      if (r >= 8 || c >= 8 || r < 0 || c < 0) {
         myGameArea.selected = null;
         myGameArea.options = [];
         myGameArea.update();
       } else if (myGameArea.selected != null && myGameArea.inOptions([r,c])) {
-        console.log('move');
         myGameArea.moveChessPiece(myGameArea.selected[0], myGameArea.selected[1], r, c);
         myGameArea.selected = null;
         myGameArea.options = [];
         myGameArea.update();
       } else if (myGameArea.selected != null && !myGameArea.inOptions([r,c])) {
-        console.log('reset');
         myGameArea.selected = null;
         myGameArea.options = [];
         myGameArea.update();
       } else if (myGameArea.board[r][c] != null && myGameArea.board[r][c].color == myGameArea.turn) {
-        console.log('select');
         myGameArea.board[r][c].getLegalMoves();
         myGameArea.drawOptions();
         myGameArea.selected = [r,c];
@@ -579,6 +627,8 @@ var myGameArea = {
     },
 
     newTurn : function() {
+      this.timer.pause();
+      this.timer.addTime(2);
       if (this.checkmate) {
         window.confirm(this.turn + " has won the game!");
         this.turn = 'game over';
@@ -589,6 +639,14 @@ var myGameArea = {
         this.options = [];
         //En Passant information
         this.en_passant = [];
+
+        // Switch Timers
+        if (this.timer.color == 'white') {
+          this.timer = black_timer;
+        } else {
+          this.timer = white_timer;
+        }
+        this.timer.start();
       }
     },
 
@@ -618,4 +676,56 @@ var myGameArea = {
       }
       this.check_positions = attack_positions;
     },
+
+    begin : function() {
+      this.turn = 'white';
+      this.timer.start();
+    },
+
+    pause : function() {
+      this.timer.pause();
+      this.last_turn = this.turn;
+      this.turn = 'pause';
+    },
+
+    resume : function() {
+      this.timer.start();
+      this.turn = this.last_turn;
+    }
+}
+
+var black_timer_element = document.getElementById('black_timer');
+var black_timer = new Timer('black', black_interval);
+function black_interval () {
+  if (black_timer.time_left > 0) {
+    black_timer.time_left -= 1;
+    black_timer_element.innerHTML = black_timer.time_left;
+    if (black_timer.time_left == 0) {
+        clearInterval(black_timer.timer);
+    }
+  }
+}
+
+var white_timer_element = document.getElementById('white_timer');
+var white_timer = new Timer('white', white_interval);
+function white_interval () {
+  if (white_timer.time_left > 0) {
+    white_timer.time_left -= 1;
+    white_timer_element.innerHTML = white_timer.time_left;
+    if (white_timer.time_left == 0) {
+        clearInterval(white_timer.timer);
+    }
+  }
+}
+
+function timer_start() {
+  if (myGameArea.turn == 'begin') {
+    myGameArea.begin();
+  } else if (myGameArea.turn == 'pause') {
+    myGameArea.resume();
+  }
+}
+
+function timer_pause() {
+  myGameArea.pause();
 }
