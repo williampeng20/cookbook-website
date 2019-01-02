@@ -23,6 +23,7 @@ function restart() {
   // King information
   myGameArea.checkmate = false;
   myGameArea.king_position = {'white' : [7,4], 'black' : [0,4]};
+  myGameArea.check_positions = [];
 
   myGameArea.update();
 
@@ -532,6 +533,10 @@ var myGameArea = {
         this.king_position = {'white' : [7,4], 'black' : [0,4]};
         this.check_positions = [];
 
+        // score
+        this.white_score = 0;
+        this.black_score = 0;
+
         this.update();
     },
 
@@ -631,7 +636,16 @@ var myGameArea = {
       this.timer.addTime(2);
       if (this.checkmate) {
         window.confirm(this.turn + " has won the game!");
+        //Update scoreline
+        if (this.turn == 'white') {
+          this.white_score += 1;
+          document.getElementById('white_score').innerHTML = this.white_score;
+        } else if (this.turn == 'black') {
+          this.black_score += 1;
+          document.getElementById('black_score').innerHTML = this.black_score;
+        }
         this.turn = 'game over';
+        this.check_positions = [];
       } else {
         this.turn = this.turn == 'white' ? 'black' : 'white';
         this.turn_num += 1;
@@ -648,6 +662,18 @@ var myGameArea = {
         }
         this.timer.start();
       }
+    },
+
+    forfeit : function() {
+      if (this.turn == 'black') {
+        this.white_score += 1;
+        document.getElementById('white_score').innerHTML = this.white_score;
+      } else if (this.turn == 'white') {
+        this.black_score += 1;
+        document.getElementById('black_score').innerHTML = this.black_score;
+      }
+      this.turn = 'game over';
+      this.check_positions = [];
     },
 
     check : function(self_color) {
@@ -683,9 +709,11 @@ var myGameArea = {
     },
 
     pause : function() {
-      this.timer.pause();
-      this.last_turn = this.turn;
-      this.turn = 'pause';
+      if (this.turn == 'white' || this.turn == 'black') {
+        this.timer.pause();
+        this.last_turn = this.turn;
+        this.turn = 'pause';
+      }
     },
 
     resume : function() {
@@ -699,9 +727,10 @@ var black_timer = new Timer('black', black_interval);
 function black_interval () {
   if (black_timer.time_left > 0) {
     black_timer.time_left -= 1;
-    black_timer_element.innerHTML = black_timer.time_left;
+    black_timer.update_time();
     if (black_timer.time_left == 0) {
         clearInterval(black_timer.timer);
+        black_timer.timeout();
     }
   }
 }
@@ -711,9 +740,10 @@ var white_timer = new Timer('white', white_interval);
 function white_interval () {
   if (white_timer.time_left > 0) {
     white_timer.time_left -= 1;
-    white_timer_element.innerHTML = white_timer.time_left;
+    white_timer.update_time();
     if (white_timer.time_left == 0) {
         clearInterval(white_timer.timer);
+        white_timer.timeout();
     }
   }
 }

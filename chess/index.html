@@ -12,6 +12,18 @@ Created by William Peng 12/25/2018
 <body onload="load()" scroll="no" style="overflow: hidden">
 
     <div class='ui'>
+        <div class='scoreline'>
+          <div class='score'>
+            <h1 id='white_score'>0</h1>
+            <p>White</p>
+          </div>
+          <h1>-</h1>
+          <div class='score'>
+            <h1 id='black_score'>0</h1>
+            <p>Black</p>
+          </div>
+        </div>
+
         <div class='time_display'>
           <select id='difficulty_select' onchange="setDifficulty();">
               <option value='easy'>Relaxed</option>
@@ -30,9 +42,9 @@ Created by William Peng 12/25/2018
         </div>
 
         <div class='controls'>
-          <button class='control' onclick="timer_start()">Start</button>
-          <button class='control' onclick="timer_pause()">Pause</button>
-          <button class='control' onclick="restart()">Restart</button>
+          <button class='control' id='start' onclick="timer_start()">Start</button>
+          <button class='control' id='pause' onclick="timer_pause()">Pause</button>
+          <button class='control' id='restart' onclick="restart()">Restart</button>
         </div>
     </div>
 

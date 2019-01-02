@@ -13,6 +13,19 @@ body {
   flex-direction: row;
 }
 
+.scoreline {
+  display: flex;
+  flex-direction: row;
+  margin-top: 10%;
+  margin-left: 32%;
+}
+
+.score {
+  text-align: center;
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
 .ui {
   width: 100%;
   font-family: 'Lucida Console';
@@ -21,18 +34,19 @@ body {
 .time_display {
   display: flex;
   flex-direction: row;
-  margin-top: 20%;
+  margin-top: 10%;
 }
 
 #difficulty_select {
   margin-left: 10%;
-  margin-right: 10%;
+  margin-right: 5%;
   font-family: 'Lucida Console';
 }
 
 .timer {
   margin-left: 10%;
   margin-right: 10%;
+  text-align: center;
 }
 
 .controls {
@@ -43,7 +57,6 @@ body {
 .control {
   margin-left: 6%;
   margin-right: 6%;
-  background-color: #4CAF50; /* Green */
   border: none;
   color: white;
   padding: 15px 32px;
@@ -52,5 +65,21 @@ body {
   display: inline-block;
   font-family: 'Lucida Console';
   font-size: 16px;
+  outline: none;
   border-radius: 10px;
+  box-shadow: 0 6px #999;
 }
+
+.control:active {
+  box-shadow: 0 2px #666;
+  transform: translateY(4px);
+}
+
+#start {background-color: #136F63;}
+#start:hover {background-color: #0C5E53;}
+
+#pause {background-color: #3F88C5;}
+#pause:hover {background-color: #28679B;}
+
+#restart {background-color: #0E496D;}
+#restart:hover {background-color: #032B43;}

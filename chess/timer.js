@@ -7,10 +7,10 @@ class Timer {
         this.element;
         if (color == 'white') {
             this.element = document.getElementById('white_timer')
-            this.element.innerHTML = this.time_left;
+            this.update_time();
         } else {
             this.element = document.getElementById('black_timer');
-            this.element.innerHTML = this.time_left;
+            this.update_time();
         }
     }
 
@@ -20,16 +20,27 @@ class Timer {
 
     pause() {
         clearInterval(this.timer);
-        return this.time_left;
     }
 
     addTime(num) {
         this.time_left += num;
-        this.element.innerHTML = this.time_left;
+        this.update_time();
     }
 
     reset(num) {
         this.time_left = num;
-        this.element.innerHTML = this.time_left;
+        this.update_time();
+    }
+
+    update_time() {
+        var subtotal = this.time_left;
+        var min = Math.floor(subtotal/60);
+        var sec = subtotal - min*60;
+        this.element.innerHTML = min + ":" + ((sec > 9) ? "" : "0") + sec;
+    }
+
+    timeout() {
+        alert(this.color + ' has forfeit by timeout.');
+        myGameArea.forfeit();
     }
 }
