@@ -1,6 +1,6 @@
 class Timer {
     constructor(color, interval_func) {
-        this.time_left = 150;
+        this.time_left = 900;
         this.timer = null;
         this.interval = interval_func;
         this.color = color;

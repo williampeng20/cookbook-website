@@ -12,6 +12,7 @@ Created by William Peng 12/25/2018
 <body onload="load()" scroll="no" style="overflow: hidden">
 
     <div class='ui'>
+        <h1 id='turn' style='margin-left: 40%'></h1>
         <div class='scoreline'>
           <div class='score'>
             <h1 id='white_score'>0</h1>
@@ -26,9 +27,9 @@ Created by William Peng 12/25/2018
 
         <div class='time_display'>
           <select id='difficulty_select' onchange="setDifficulty();">
-              <option value='easy'>Relaxed</option>
-              <option value='medium'>Challenging</option>
-              <option value='hard'>Blitz</option>
+              <option value='easy'>Rapid (+10s/move)</option>
+              <option value='medium'>Blitz (+3s/move)</option>
+              <option value='hard'>Bullet (+0s/move)</option>
           </select>
 
           <div class='timer'>
@@ -44,6 +45,9 @@ Created by William Peng 12/25/2018
         <div class='controls'>
           <button class='control' id='start' onclick="timer_start()">Start</button>
           <button class='control' id='pause' onclick="timer_pause()">Pause</button>
+        </div>
+        <div class='controls'>
+          <button class='control' id='forfeit' onclick="myGameArea.forfeit()">Forfeit</button>
           <button class='control' id='restart' onclick="restart()">Restart</button>
         </div>
     </div>

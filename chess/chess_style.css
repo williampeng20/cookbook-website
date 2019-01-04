@@ -38,7 +38,7 @@ body {
 }
 
 #difficulty_select {
-  margin-left: 10%;
+  margin-left: 5%;
   margin-right: 5%;
   font-family: 'Lucida Console';
 }
@@ -82,4 +82,9 @@ body {
 #pause:hover {background-color: #28679B;}
 
 #restart {background-color: #0E496D;}
-#restart:hover {background-color: #032B43;}
+#restart:disabled {background-color: #CCCCCC;}
+#restart:hover:enabled {background-color: #032B43;}
+
+#forfeit {background-color: #D83439}
+#forfeit:disabled {background-color: #CCCCCC;}
+#forfeit:hover:enabled {background-color: #B22126}

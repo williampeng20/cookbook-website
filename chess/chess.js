@@ -26,24 +26,29 @@ function restart() {
   myGameArea.check_positions = [];
 
   myGameArea.update();
+  update_turn_status();
 
   //Timer
   setDifficulty();
   myGameArea.timer = white_timer;
+  document.getElementById('restart').disabled = true;
 }
 
 function setDifficulty() {
   myGameArea.timer.pause();
   var difficulty = document.getElementById('difficulty_select').value;
   if (difficulty == 'easy') {
-    white_timer.reset(150);
-    black_timer.reset(150);
+    white_timer.reset(900);
+    black_timer.reset(900);
+    myGameArea.move_reward = 10;
   } else if (difficulty == 'medium') {
-    white_timer.reset(90);
-    black_timer.reset(90);
+    white_timer.reset(300);
+    black_timer.reset(300);
+    myGameArea.move_reward = 3;
   } else if (difficulty == 'hard') {
-    white_timer.reset(30);
-    black_timer.reset(30);
+    white_timer.reset(60);
+    black_timer.reset(60);
+    myGameArea.move_reward = 0;
   }
 }
 
@@ -506,9 +511,12 @@ var myGameArea = {
         this.context = this.canvas.getContext("2d");
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
         document.addEventListener('click', this.getClickCoordinates);
+        document.getElementById('restart').disabled = true;
+        document.getElementById('forfeit').disabled = true;
 
         //Chess Timing
         this.timer = white_timer;
+        this.move_reward = 10;
 
         // Coordinates in [Row, Column]
         this.board = [
@@ -538,17 +546,18 @@ var myGameArea = {
         this.black_score = 0;
 
         this.update();
+        update_turn_status();
     },
 
     update : function() {
       for (var i = 0; i < 8; i++) {
         for (var j = 0; j < 8; j+=2) {
-          this.context.fillStyle = i%2==0 ? "#BFADA3" : "#504746";
+          this.context.fillStyle = i%2==0 ? "#BFADA3" : "#665452";
           this.context.fillRect(j*72, i*72, 72, 72);
           if (this.board[i][j] != null) {
             this.context.drawImage(this.board[i][j].image, j*72, i*72, 72, 72);
           }
-          this.context.fillStyle = i%2==0 ? "#504746" : "#BFADA3";
+          this.context.fillStyle = i%2==0 ? "#665452" : "#BFADA3";
           this.context.fillRect((j+1)*72, i*72, 72, 72);
           if (this.board[i][j+1] != null) {
             this.context.drawImage(this.board[i][j+1].image, (j+1)*72, i*72, 72, 72);
@@ -633,7 +642,7 @@ var myGameArea = {
 
     newTurn : function() {
       this.timer.pause();
-      this.timer.addTime(2);
+      this.timer.addTime(this.move_reward);
       if (this.checkmate) {
         window.confirm(this.turn + " has won the game!");
         //Update scoreline
@@ -645,7 +654,9 @@ var myGameArea = {
           document.getElementById('black_score').innerHTML = this.black_score;
         }
         this.turn = 'game over';
+        document.getElementById('restart').disabled = false;
         this.check_positions = [];
+        update_turn_status();
       } else {
         this.turn = this.turn == 'white' ? 'black' : 'white';
         this.turn_num += 1;
@@ -653,6 +664,7 @@ var myGameArea = {
         this.options = [];
         //En Passant information
         this.en_passant = [];
+        update_turn_status();
 
         // Switch Timers
         if (this.timer.color == 'white') {
@@ -665,6 +677,10 @@ var myGameArea = {
     },
 
     forfeit : function() {
+      this.timer.pause();
+      if (this.turn == 'pause') {
+        this.turn = this.last_turn;
+      }
       if (this.turn == 'black') {
         this.white_score += 1;
         document.getElementById('white_score').innerHTML = this.white_score;
@@ -673,7 +689,10 @@ var myGameArea = {
         document.getElementById('black_score').innerHTML = this.black_score;
       }
       this.turn = 'game over';
+      document.getElementById('restart').disabled = false;
       this.check_positions = [];
+      update_turn_status();
+      document.getElementById('forfeit').disabled = true;
     },
 
     check : function(self_color) {
@@ -704,8 +723,11 @@ var myGameArea = {
     },
 
     begin : function() {
-      this.turn = 'white';
+      this.turn = this.starting_turn == 'white' ? 'black' : 'white';
+      this.starting_turn = this.turn;
       this.timer.start();
+      update_turn_status();
+      document.getElementById('forfeit').disabled = false;
     },
 
     pause : function() {
@@ -713,12 +735,14 @@ var myGameArea = {
         this.timer.pause();
         this.last_turn = this.turn;
         this.turn = 'pause';
+        update_turn_status();
       }
     },
 
     resume : function() {
       this.timer.start();
       this.turn = this.last_turn;
+      update_turn_status();
     }
 }
 
@@ -758,4 +782,8 @@ function timer_start() {
 
 function timer_pause() {
   myGameArea.pause();
+}
+
+function update_turn_status() {
+  document.getElementById('turn').innerHTML = myGameArea.turn;
 }
