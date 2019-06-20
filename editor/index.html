@@ -1,0 +1,36 @@
+<!--------------------------------------------------------------------------
+Created by William Peng 6/17/2019
+--------------------------------------------------------------------------->
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="icon" href="../graphics/cs_icon.ico">
+    <meta charset="utf-8"/>
+    <title>Image Editor</title>
+    <!-- Either include the full CamanJS code including plugins -->
+    <script type="text/javascript" src="caman.full.min.js"></script>
+    <script type="text/javascript" src="caman.js"></script>
+    <script type="text/javascript" src="require.js"></script>
+    <script type="text/javascript" src="editor.js"></script>
+</head>
+
+<body>
+
+  <div>
+    <div class='image'>
+      <!--<img src="" class='pic' id='pic' alt="Image preview..."><br>-->
+      <canvas id='canvas' style='width: 100%; height: 100%;'></canvas>
+    </div>
+
+    <div class='controls'>
+      <input type="file" onchange="image_upload()"><br>
+      <h5>Contrast</h5>
+      <input id='contrast_val' type="range" min='-255' max='255' value='0' onchange="contrast()">
+      <p id='contrast_ind'>0</p>
+      <!--<button onclick="save()">Save</button>-->
+    </div>
+  </div>
+
+</body>
+</html>
