@@ -7,6 +7,7 @@ import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
 import { RecipeInput, Ingredient } from '../../util/recipeUtils';
+import { Typography } from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -20,13 +21,15 @@ const useStyles = makeStyles((theme: Theme) =>
     rowButtons: {
         padding: '2% 2%',
     },
+    error: {
+        margin: '1%',
+    },
   }),
 );
 
 type RecipeIngredientsFormProps = {
     handleNext: (input: Ingredient[]) => void;
     handleBack: () => void;
-    // TODO add loading prop for API calls
     ingredients: Ingredient[];
 };
 
@@ -40,19 +43,17 @@ export default function RecipeForm(props: RecipeIngredientsFormProps) {
                     ingredients: ingredients,
                 }}
                 validate={values => {
-                    // TODO create validations on required fields
                     const errors: Partial<RecipeInput> = {};
+                    if (values.ingredients.length === 0) {
+                        errors.ingredients = "Recipe Ingredients are required" as unknown as Ingredient[];
+                    }
                     return errors;
                 }}
                 onSubmit={(values, { setSubmitting }) => {
-                    // setTimeout(() => {
-                    //     setSubmitting(false);
-                    //alert(JSON.stringify(values, null, 2));
-                    // }, 500);
                     handleNext(values.ingredients);
                 }}
             >
-                {({ submitForm, values }) => (
+                {({ submitForm, values, errors }) => (
                 <Form>
                     {/** TODO FieldArray performance issues: https://github.com/formium/formik/issues/2296 */}
                     <FieldArray
@@ -85,6 +86,7 @@ export default function RecipeForm(props: RecipeIngredientsFormProps) {
                                                     variant="outlined"
                                                     className={classes.field}
                                                 />
+                                                {/** TODO add pressing ENTER key functionality */}
                                                 <IconButton
                                                     aria-label="delete"
                                                     className={classes.rowButtons}
@@ -117,6 +119,9 @@ export default function RecipeForm(props: RecipeIngredientsFormProps) {
                             </div>
                         )}
                     />
+                    <Typography color="error" className={classes.error}>
+                        {errors.ingredients ? errors.ingredients : undefined}
+                    </Typography>
                     <div>
                         <Button
                             onClick={handleBack}

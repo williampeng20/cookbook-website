@@ -6,25 +6,22 @@ import {
 } from "react-router-dom";
 import { ROUTES } from './util/routeUtils';
 
-import Home from './Components/Home';
+import Home from './Components/Home'
 import RecipeList from './Components/RecipeList';
 import AddUpdateRecipeForm from './Components/AddUpdateRecipeForm';
 import RecipeDetails from './Components/RecipeDetails';
-import SignUpForm from './Components/SignUpForm';
-import SignInForm from './Components/SignInForm';
+import SignInScreen from './Components/SignInScreen';
+import Navigation from './Components/Navigation';
 
 function App() {
   return (
     <Router>
       <div>
+        <Navigation />
         <Switch>
-          <Route exact path={ROUTES.home} component={RecipeList}>
+          <Route exact path={ROUTES.home} component={Home}>
           </Route>
-          <Route exact path={ROUTES.signin}>
-            <SignInForm />
-          </Route>
-          <Route exact path={ROUTES.signup}>
-            <SignUpForm />
+          <Route exact path={ROUTES.signin} component={SignInScreen}>
           </Route>
           <Route exact path={ROUTES.recipeList} component={RecipeList}>
           </Route>

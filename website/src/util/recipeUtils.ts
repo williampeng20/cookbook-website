@@ -8,14 +8,16 @@ export type RecipeContent = {
 export type RecipeMeta = {
     id: string,
     name: string,
-    author: string,
+    authorName: string,
+    authorId: string,
     description: string,
     servingSize: number,
 };
 
 export type RecipeMetaInput = {
     name: string,
-    author: string,
+    authorName: string,
+    authorId: string,
     description: string,
     servingSize: number,
 };

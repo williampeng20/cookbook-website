@@ -10,6 +10,8 @@ import IconButton from '@material-ui/core/IconButton';
 import CreateIcon from '@material-ui/icons/Create';
 import { RecipeMeta } from '../util/recipeUtils';
 import { ROUTES } from '../util/routeUtils';
+import { getRecipesQuery, SERVER_URL } from '../util/serverUtils';
+import { userLoggedIn } from '../util/authUtils';
 import { generatePath, RouteComponentProps } from 'react-router';
 
 import '../Styles/RecipeList.css';
@@ -37,12 +39,21 @@ class RecipeList extends React.Component<RecipeListProps, RecipeListState> {
     }
 
     componentDidMount() {
+        this.checkLoginStatus();
         this.getRecipes();
     }
 
+    checkLoginStatus() {
+        if (!userLoggedIn()) {
+            const { history } = this.props;
+            const url = generatePath(ROUTES.signin);
+            history.push(url);
+        }
+    }
+
     getRecipes() {
-        const query = `{ getRecipes {id,name,author,description} }`;
-        axios.post(`http://localhost:4000/graphql`, { query: query })
+        const query = getRecipesQuery();
+        axios.post( SERVER_URL, { query: query })
             .then( res => {
                 this.setState({ recipes: res.data.data.getRecipes })
         }).catch( error => console.log(error));
@@ -65,7 +76,7 @@ class RecipeList extends React.Component<RecipeListProps, RecipeListState> {
                                 <CardActionArea onClick={onCardClick}>
                                     <CardHeader
                                         title={r.name}
-                                        subheader={r.author}
+                                        subheader={r.authorName}
                                     />
                                     <CardContent>
                                         <Typography variant="body2" color="textSecondary" component="p">

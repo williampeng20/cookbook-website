@@ -23,6 +23,7 @@ import { RouteComponentProps, generatePath } from 'react-router';
 import { Recipe } from '../util/recipeUtils';
 import { SERVER_URL, getRecipeDetailsQuery, deleteRecipeMutation } from '../util/serverUtils';
 import { ROUTES } from '../util/routeUtils';
+import { getUserId, userLoggedIn } from '../util/authUtils';
 import DeleteRecipeModal from './DeleteRecipeModal';
 
 import '../Styles/RecipeDetails.css';
@@ -56,7 +57,16 @@ class RecipeDetails extends React.Component<RecipeDetailsProps, RecipeDetailsSta
     }
 
     componentDidMount() {
+        this.checkLoginStatus();
         this.getRecipe(this.getRecipeId());
+    }
+
+    checkLoginStatus() {
+        if (!userLoggedIn()) {
+            const { history } = this.props;
+            const url = generatePath(ROUTES.signin);
+            history.push(url);
+        }
     }
 
     getRecipe = (id: string) => {
@@ -173,14 +183,14 @@ class RecipeDetails extends React.Component<RecipeDetailsProps, RecipeDetailsSta
     renderRecipeMeta() {
         const { recipeDetail } = this.state;
         if (recipeDetail) {
-            const { name, author, description } = recipeDetail;
+            const { name, authorName, description } = recipeDetail;
             return (
                 <div className="recipeMetaRoot">
                     <Typography variant="h2">
                         {name}
                     </Typography>
                     <Typography variant="h5" gutterBottom>
-                        {author}
+                        {authorName}
                     </Typography>
                     <Typography variant="h6" gutterBottom>
                         {description}
@@ -193,7 +203,7 @@ class RecipeDetails extends React.Component<RecipeDetailsProps, RecipeDetailsSta
     renderActions() {
         const { menuOpen, recipeDetail } = this.state;
         const { history } = this.props;
-        if (recipeDetail) {
+        if (recipeDetail && recipeDetail.authorId === getUserId()) {
             const actions = [
                 {
                     icon: <EditIcon />,
@@ -248,9 +258,9 @@ class RecipeDetails extends React.Component<RecipeDetailsProps, RecipeDetailsSta
         const { deleteModalOpen, recipeDetail } = this.state;
         const { history } = this.props;
         if (recipeDetail) {
-            const {id, author} = recipeDetail;
+            const {id, authorId} = recipeDetail;
             const onSubmit = () => {
-                const query = deleteRecipeMutation(id, author);
+                const query = deleteRecipeMutation(id, authorId);
                 axios.post(SERVER_URL, {query: query})
                     .then((val) => {
                         const url = generatePath(ROUTES.recipeList);

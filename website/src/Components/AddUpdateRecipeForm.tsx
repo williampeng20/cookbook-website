@@ -5,6 +5,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { RecipeInput, Recipe } from '../util/recipeUtils';
 import { SERVER_URL, getRecipeDetailsQuery, createRecipeMutation, updateRecipeMutation } from '../util/serverUtils';
 import { ROUTES } from '../util/routeUtils';
+import { userLoggedIn } from '../util/authUtils';
 import RecipeForm from './RecipeForm/RecipeForm';
 
 import '../Styles/AddUpdateRecipeForm.css';
@@ -33,9 +34,18 @@ class AddUpdateRecipeForm extends React.Component<AddUpdateRecipeFormProps, AddU
 
 
     componentDidMount() {
+        this.checkLoginStatus();
         const recipeId: string | undefined = this.getRecipeId();
         if (recipeId) {
             this.getRecipe(recipeId);
+        }
+    }
+
+    checkLoginStatus() {
+        if (!userLoggedIn()) {
+            const { history } = this.props;
+            const url = generatePath(ROUTES.signin);
+            history.push(url);
         }
     }
 

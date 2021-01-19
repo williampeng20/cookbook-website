@@ -3,6 +3,7 @@ import { Formik, Form, Field, FieldArray } from 'formik';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import { TextField } from 'formik-material-ui';
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
@@ -17,8 +18,15 @@ const useStyles = makeStyles((theme: Theme) =>
         margin: '1%',
         width: '50%',
     },
+    addField: {
+        margin: '1%',
+        width: '15%',
+    },
     rowButtons: {
         padding: '2% 2%',
+    },
+    error: {
+        margin: '1%',
     },
   }),
 );
@@ -26,7 +34,6 @@ const useStyles = makeStyles((theme: Theme) =>
 type RecipeDirectionsFormProps = {
     handleNext: (input: string[]) => void;
     handleBack: () => void;
-    // TODO add loading prop for API calls
     directions: string[];
 };
 
@@ -40,19 +47,17 @@ export default function RecipeDirectionsForm(props: RecipeDirectionsFormProps) {
                     directions: directions,
                 }}
                 validate={values => {
-                    // TODO create validations on required fields
                     const errors: Partial<RecipeInput> = {};
+                    if (values.directions.length === 0) {
+                        errors.directions = "Recipe Ingredients are required" as unknown as string[];
+                    }
                     return errors;
                 }}
                 onSubmit={(values, { setSubmitting }) => {
-                    // setTimeout(() => {
-                    //     setSubmitting(false);
-                    //alert(JSON.stringify(values, null, 2));
-                    // }, 500);
                     handleNext(values.directions);
                 }}
             >
-                {({ submitForm, values }) => (
+                {({ submitForm, values, errors }) => (
                 <Form>
                     {/** TODO FieldArray performance issues: https://github.com/formium/formik/issues/2296 */}
                     <FieldArray
@@ -70,6 +75,7 @@ export default function RecipeDirectionsForm(props: RecipeDirectionsFormProps) {
                                                     variant="outlined"
                                                     className={classes.field}
                                                 />
+                                                {/** TODO add pressing ENTER key functionality */}
                                                 <IconButton
                                                     aria-label="delete"
                                                     className={classes.rowButtons}
@@ -93,7 +99,7 @@ export default function RecipeDirectionsForm(props: RecipeDirectionsFormProps) {
                                     <Button
                                         variant="contained"
                                         color="primary"
-                                        className={classes.field}
+                                        className={classes.addField}
                                         onClick={() => arrayHelpers.insert(0, '')}
                                     >
                                         Add directions
@@ -102,6 +108,9 @@ export default function RecipeDirectionsForm(props: RecipeDirectionsFormProps) {
                             </div>
                         )}
                     />
+                    <Typography color="error" className={classes.error}>
+                        {errors.directions ? errors.directions : undefined}
+                    </Typography>
                     <div>
                         <Button
                             onClick={handleBack}

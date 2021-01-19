@@ -52,20 +52,6 @@ export default function RecipeReviewStep(props: RecipeReviewStepProps) {
             </div>
             <div className={classes.section}>
                 <Typography variant="h4" className={classes.title}>
-                    Author
-                </Typography>
-                <IconButton
-                    className={classes.editButton}
-                    onClick={() => props.goToStep(0)}
-                >
-                    <EditIcon color="primary"/>
-                </IconButton>
-                <Typography>
-                    {props.recipe.author}
-                </Typography>
-            </div>
-            <div className={classes.section}>
-                <Typography variant="h4" className={classes.title}>
                     Description
                 </Typography>
                 <IconButton

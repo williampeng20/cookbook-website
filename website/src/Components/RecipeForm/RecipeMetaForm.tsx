@@ -31,13 +31,22 @@ export default function RecipeMetaForm(props: RecipeMetaFormProps) {
             <Formik
                 initialValues={{
                     name: recipeMeta.name,
-                    author: recipeMeta.author,
+                    authorId: recipeMeta.authorId,
+                    authorName: recipeMeta.authorName,
                     description: recipeMeta.description,
                     servingSize: recipeMeta.servingSize,
                 }}
                 validate={values => {
-                    // TODO create validations on required fields
                     const errors: Partial<RecipeMetaInput> = {};
+                    if (!values.name) {
+                        errors.name = "Recipe name is required";
+                    }
+                    if (!values.description) {
+                        errors.description = "Recipe description is required";
+                    }
+                    if (!values.servingSize) {
+                        errors.servingSize = "Recipe serving size is required" as unknown as number;
+                    }
                     return errors;
                 }}
                 onSubmit={(values, { setSubmitting }) => {
@@ -51,14 +60,6 @@ export default function RecipeMetaForm(props: RecipeMetaFormProps) {
                         component={TextField}
                         name="name"
                         label="Name"
-                        variant="outlined"
-                        className={classes.field}
-                    />
-                    <br />
-                    <Field
-                        component={TextField}
-                        label="Author"
-                        name="author"
                         variant="outlined"
                         className={classes.field}
                     />

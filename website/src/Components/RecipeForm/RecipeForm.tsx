@@ -5,6 +5,7 @@ import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Typography from '@material-ui/core/Typography';
 import { Recipe, RecipeInput, RecipeMetaInput, Ingredient } from '../../util/recipeUtils';
+import { getUserId, getUserDisplayName } from '../../util/authUtils';
 import RecipeMetaForm from './RecipeMetaForm';
 import RecipeIngredientsForm from './RecipeIngredientsForm';
 import RecipeDirectionsForm from './RecipeDirectionsForm';
@@ -29,9 +30,10 @@ function getSteps() {
   return ['Recipe information', 'Ingredients', 'Directions', 'Review'];
 };
 
-const defaultRecipeMetaValues = {
+const defaultRecipeMetaValues: RecipeMetaInput = {
     name: '',
-    author: '',
+    authorId: getUserId(),
+    authorName: getUserDisplayName(),
     description: '',
     servingSize: 1,
 };

@@ -11,8 +11,8 @@
 
 .servingSizeRoot {
     position: fixed !important;
-    width: 25%;
-    right: 0%;
+    width: 15%;
+    right: 10%;
     top: 8%;
 }
 
@@ -21,7 +21,7 @@
 }
 
 .servingSizeInput {
-    width: 30%;
+    width: 100%;
 }
 
 .directionsRoot {

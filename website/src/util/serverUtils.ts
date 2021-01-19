@@ -2,12 +2,17 @@ import { Recipe, RecipeInput } from './recipeUtils';
 
 export const SERVER_URL = 'http://localhost:4000/graphql';
 
+export function getRecipesQuery(): string {
+    return `{ getRecipes {id,name,authorName,description} }`;
+}
+
 export function getRecipeDetailsQuery(id: string): string {
     return `{
         getRecipe(id: "${id}") {
             id,
             name,
-            author,
+            authorName,
+            authorId,
             description,
             directions,
             servingSize,
@@ -25,7 +30,8 @@ export function createRecipeMutation(recipe: RecipeInput): string {
     return `mutation {
         createRecipe(recipe: {
             name: "${recipe.name}",
-            author: "${recipe.author}",
+            authorName: "${recipe.authorName}",
+            authorId: "${recipe.authorId}",
             description: "${recipe.description}",
             servingSize: ${recipe.servingSize},
             directions: [${recipe.directions.map(dir => `"${dir}"`).toString()}],
@@ -47,7 +53,8 @@ export function updateRecipeMutation(recipe: Recipe): string {
     return `mutation {
         updateRecipe(id: "${recipe.id}", recipe: {
             name: "${recipe.name}",
-            author: "${recipe.author}",
+            authorName: "${recipe.authorName}",
+            authorId: "${recipe.authorId}",
             description: "${recipe.description}",
             servingSize: ${recipe.servingSize},
             directions: [${recipe.directions.map(dir => `"${dir}"`).toString()}],
@@ -65,8 +72,8 @@ export function updateRecipeMutation(recipe: Recipe): string {
     }`;
 }
 
-export function deleteRecipeMutation(id: string, author: string): string {
+export function deleteRecipeMutation(id: string, authorId: string): string {
     return `mutation {
-        deleteRecipe(id: "${id}", author: "${author}")
+        deleteRecipe(id: "${id}", authorId: "${authorId}")
     }`;
 }
